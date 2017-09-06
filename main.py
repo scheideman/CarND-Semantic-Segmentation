@@ -63,25 +63,25 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # need to check shape
     #strides=(1,1) 
     output_1x1_1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding='same', 
-                                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001)
-                                        kernel_initializer='he_normal')
+                                        kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
+                                        activation='relu', kernel_initializer="glorot_uniform")
     output_decode1 = tf.layers.conv2d_transpose(output_1x1_1, num_classes, 4, strides=(2, 2), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
-                                        kernel_initializer='he_normal') 
+                                        activation='relu', kernel_initializer="glorot_uniform") 
     output_1x1_2 = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding='same', 
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
-                                        kernel_initializer='he_normal')
+                                        activation='relu', kernel_initializer="glorot_uniform")
     output_skip1 = tf.add(output_decode1, output_1x1_2)
     output_decode2 = tf.layers.conv2d_transpose(output_skip1, num_classes, 4, strides=(2, 2), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
-                                        kernel_initializer='he_normal')
+                                        activation='relu', kernel_initializer="glorot_uniform")
     output_1x1_3 = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding='same', 
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
-                                        kernel_initializer='he_normal')
+                                        activation='relu', kernel_initializer="glorot_uniform")
     output_skip2 = tf.add(output_decode2, output_1x1_3)
     output_decode3 = tf.layers.conv2d_transpose(output_skip2, num_classes, 16, strides=(8, 8), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.0001),
-                                        kernel_initializer='he_normal')
+                                        activation='relu', kernel_initializer="glorot_uniform")
     
 
     return output_decode3
