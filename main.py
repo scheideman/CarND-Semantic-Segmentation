@@ -64,24 +64,24 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     #strides=(1,1) 
     output_1x1_1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding='same', 
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     output_decode1 = tf.layers.conv2d_transpose(output_1x1_1, num_classes, 4, strides=(2, 2), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer()) 
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01)) 
     output_1x1_2 = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding='same', 
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     output_skip1 = tf.add(output_decode1, output_1x1_2)
     output_decode2 = tf.layers.conv2d_transpose(output_skip1, num_classes, 4, strides=(2, 2), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     output_1x1_3 = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding='same', 
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     output_skip2 = tf.add(output_decode2, output_1x1_3)
     output_decode3 = tf.layers.conv2d_transpose(output_skip2, num_classes, 16, strides=(8, 8), padding='same',
                                         kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001),
-                                        kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                        kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
     
 
     return output_decode3
@@ -133,7 +133,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         batches = get_batches_fn(batch_size)
         print("Epoch: " + str(i))
         for batch_x, batch_y in tqdm(batches):
-            sess.run(train_op, feed_dict={input_image: batch_x, correct_label: batch_y, keep_prob: 0.5, learning_rate: 0.001})
+            sess.run(train_op, feed_dict={input_image: batch_x, correct_label: batch_y, keep_prob: 0.5, learning_rate: 0.0001})
             print("Loss: {}".format(sess.run(cross_entropy_loss, feed_dict={input_image: batch_x, correct_label: batch_y, keep_prob:0.5})))
 
     
