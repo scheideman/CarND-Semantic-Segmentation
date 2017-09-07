@@ -133,9 +133,10 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         batches = get_batches_fn(batch_size)
         print("Epoch: " + str(i))
         for batch_x, batch_y in tqdm(batches):
-            sess.run(train_op, feed_dict={input_image: batch_x, correct_label: batch_y, keep_prob: 0.5, learning_rate: 0.0001})
-            print("Loss: {}".format(sess.run(cross_entropy_loss, feed_dict={input_image: batch_x, correct_label: batch_y, keep_prob:0.5})))
-
+            _, loss_value = sess.run([train_op,cross_entropy_loss], 
+					feed_dict={input_image: batch_x, 
+					correct_label: batch_y, keep_prob: 0.5, learning_rate: 0.0001})
+            print(" Loss: {}".format(loss_value))	
     
 tests.test_train_nn(train_nn)
 
